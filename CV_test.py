@@ -18,7 +18,33 @@ import pylab as py
 import scipy as sp  
 import pandas as pd
 from pandas import Series, DataFrame
-from sklearn.model_selection import train_test_split
 from sklearn import datasets
 from sklearn import svm
+from sklearn import metrics
+from sklearn.model_selection import train_test_split # slipt dataset
+from sklearn.model_selection import cross_val_score
 ###########################################################################################
+
+
+
+
+
+# Starting with loading  slipt test:
+X, y = datasets.load_iris(return_X_y=True)
+print(X.shape, y.shape)#see dataset shape
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.4, random_state=0)#slipt training and test
+print(X_train.shape, y_train.shape)# see dataset shape
+print(X_test.shape, y_test.shape)# see data set shape
+
+#The simplest way to use cross-validation is to call the cross_val_score helper function on the estimator and the dataset:
+clf = svm.SVC(kernel='linear', C=1)
+scores = cross_val_score(clf, X, y, cv=5)
+print(scores)
+
+#print accuracy
+print("Accuracy: %0.2f (+/- %0.2f)" % (scores.mean(), scores.std() * 2))
+
+#Compute scores
+scores = cross_val_score(clf, X, y, cv=5, scoring='f1_macro')
+print(scores)
